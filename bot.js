@@ -1,6 +1,5 @@
 // ===========================================
-// ENHANCED HARDCODE SECURITY SCANNER v2.1
-// Improved accuracy and detection capabilities
+// HARDCODE SECURITY SCANNER
 // ===========================================
 
 class EnhancedHardcodeScanner {

@@ -1,0 +1,165 @@
+Overview
+The Enhanced Hardcode Security Scanner is a robust JavaScript-based tool designed to detect hardcoded sensitive data in web applications. It scans various sources including DOM content, JavaScript files, browser storage, cookies, and network requests to identify potential security vulnerabilities such as exposed API keys, private cryptographic keys, mnemonic phrases, database credentials, and more.
+This scanner is built to minimize false positives through advanced validation and context analysis, providing detailed reports with actionable recommendations to secure sensitive data.
+Features
+
+Comprehensive Scanning: Scans DOM, scripts, storage (localStorage, sessionStorage, IndexedDB), cookies, window objects, and network requests.
+Wide Range of Patterns: Detects over 30 types of sensitive data including:
+Cryptocurrency private keys (Bitcoin, Ethereum, Solana, SUI)
+Mnemonic phrases (12, 15, 18, 21, 24 words)
+API keys (AWS, Google Cloud, GitHub, OpenAI, Stripe, etc.)
+Database connection strings (MongoDB, PostgreSQL, MySQL)
+JWT tokens, RSA/ECDSA/OpenSSH private keys, and generic secrets
+
+
+Advanced Validation: Reduces false positives with pattern-specific validators (e.g., BIP39 wordlist for mnemonics, format checks for keys).
+Multiple Scan Modes:
+quickScan: Fast scan of DOM and storage
+standardScan: Comprehensive scan excluding network monitoring
+deepFullScan: Complete analysis including dynamic content and network requests
+
+
+Real-time Monitoring: Periodic scanning for new sensitive data.
+Export Capabilities: Generate reports in JSON, CSV, or HTML formats.
+Customizable Options: Fine-tune scans with options for including/excluding specific sources and verbosity levels.
+
+Installation
+
+Include the Script:Copy the bot.js file into your project or include it in your HTML:
+<script src="bot.js"></script>
+
+
+Browser Console:The scanner is automatically available as window.scanner in the browser console after loading.
+
+No Dependencies:The scanner is standalone and runs entirely in the browser without external dependencies.
+
+
+Usage
+After loading the script, the scanner is initialized as window.scanner and automatically performs a deep scan. You can interact with it via the browser console.
+Available Commands
+// Quick scan (DOM + Storage)
+scanner.quickScan();
+
+// Standard scan (DOM, scripts, storage, window object)
+scanner.standardScan();
+
+// Deep scan (all sources including network monitoring)
+scanner.deepFullScan();
+
+// Scan a specific DOM element
+scanner.scanElement("#login-form");
+
+// Start real-time monitoring (every 10 seconds)
+scanner.startMonitoring();
+
+// Stop monitoring
+scanner.stopMonitoring();
+
+// Export scan results
+scanner.export();        // JSON format
+scanner.export("csv");   // CSV format
+scanner.export("html");  // HTML format
+
+// Test a specific pattern
+scanner.testPattern("openai_api_key", "sk-1234567890abcdef");
+
+// List all available patterns
+scanner.listPatterns();
+
+// Custom scan with options
+scanner.scan({
+  includeScripts: true,
+  includeStorage: true,
+  includeCookies: true,
+  includeDOM: true,
+  includeWindowObject: true,
+  includeFetch: false,
+  deepScan: false,
+  verbose: true
+});
+
+Example Output
+Upon running a scan, the console displays:
+
+A header with scan details (target URL, time, mode)
+Findings grouped by severity (CRITICAL, HIGH, MEDIUM, LOW, INFO)
+Detailed information for each finding (type, location, source, match, confidence, context)
+A summary of findings by type and location
+Security recommendations based on findings
+
+Configuration
+The scanner can be customized via the scan method's options:
+{
+  includeScripts: boolean,      // Scan external and inline scripts
+  includeStorage: boolean,      // Scan localStorage, sessionStorage, IndexedDB
+  includeCookies: boolean,      // Scan cookies
+  includeDOM: boolean,          // Scan DOM content
+  includeWindowObject: boolean,  // Scan window object properties
+  includeFetch: boolean,        // Monitor network requests
+  deepScan: boolean,           // Perform deep analysis (dynamic content, frameworks)
+  verbose: boolean             // Show detailed output
+}
+
+Pattern Detection
+The scanner includes patterns for:
+
+Cryptocurrency:
+Bitcoin private keys (WIF, Hex)
+Ethereum private keys
+Solana private keys (Base58, Uint8Array)
+SUI private keys (Bech32, Ed25519)
+Mnemonic phrases (12-24 words)
+
+
+API Keys:
+AWS (Access Key ID, Secret Access Key, Session Token)
+Google Cloud (API Key, Service Account Key)
+GitHub (PAT, OAuth, App Token, Refresh Token)
+OpenAI (API Key, Project Key)
+Stripe (Live/Test Secret Key, Restricted Key)
+
+
+Database:
+MongoDB, PostgreSQL, MySQL connection strings
+
+
+Other:
+JWT tokens
+RSA, ECDSA, OpenSSH, Ed25519 private keys
+Generic API keys, secrets, and passwords
+Cryptocurrency addresses (informational)
+
+
+
+Each pattern includes severity ratings, validation logic, and context extraction to minimize false positives.
+Security Recommendations
+If sensitive data is detected, the scanner provides actionable recommendations:
+
+Move sensitive data to environment variables
+Use secure secret management services (e.g., AWS Secrets Manager, HashiCorp Vault)
+Implement regular secret rotation
+Avoid committing secrets to version control
+Use .env files for local development (add to .gitignore)
+Implement access controls and encryption
+Set up automated security scanning in CI/CD pipelines
+Train developers on secure coding practices
+
+Limitations
+
+Browser-based: Runs in the browser, so it cannot access server-side code or files.
+IndexedDB: Limited scanning due to permission restrictions.
+Network Requests: Only intercepts fetch requests; other methods (e.g., XHR) require additional setup.
+Dynamic Content: Deep scanning may miss content loaded after the initial scan unless monitoring is enabled.
+
+Contributing
+Contributions are welcome! To contribute:
+
+Fork the repository
+Create a new branch for your feature or bug fix
+Submit a pull request with a clear description of changes
+
+Please ensure new patterns include validation logic and appropriate severity ratings.
+License
+This project is licensed under the MIT License.
+Contact
+For issues or feature requests, please open an issue on the GitHub repository or contact the maintainers.
